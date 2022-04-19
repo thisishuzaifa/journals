@@ -1,23 +1,30 @@
 import logo from './logo.svg';
 import './App.css';
+import '@aws-amplify/ui-react/styles.css';
+import * as amplify from './amplify'
+import { Button, Loader, Authenticator } from '@aws-amplify/ui-react';
+import AppForm from './AppForm';
+import { useEffect, useState } from 'react'
+
+
+
 
 function App() {
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <title>Journal App</title>
+      <Authenticator>
+        {({ signOut, user }) => {
+          console.log('from authenticator component: ', user);
+
+          return (
+            < main >
+              <AppForm />
+            </main>
+          )
+        }}
+      </Authenticator>
     </div>
   );
 }
