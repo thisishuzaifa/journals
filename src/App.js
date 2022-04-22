@@ -47,7 +47,7 @@ function App() {
   }
 
   async function deletePost(imageName, id, username) {
-    console.log("VALUE OF ID PASSED FROM BTN CLICK " + id)
+    console.log("Id passed on" + id)
     const result = await amplify.deletePost(imageName, id, username)
     console.log('after deleting image ' + result)
     getPosts()
@@ -109,46 +109,32 @@ function App() {
                     <div className="img-descr">
                       <img className="post-img" src={image.imageUrl}></img>
                       {image.description && <p className="post-description">{image.description}</p>}
-                      {image.comments && image.comments.map(cm => (
-                        <div>
-                          <Button onClick={() => addToBucket(cm.PK, cm.SK)} size="small">Add to Bucket</Button>
-                          <Button onClick={() => removeFromBucket(cm.PK, cm.SK)} size="small">Remove from bucket</Button>
-                          <p>{cm.commentText}</p>
-                        </div>
-                      ))}
                     </div>
-                    <div className="post-btns">
-                      {user && <Button size="small" onClick={() => setUpdatedPost(true)}>Edit Post</Button >}
-                      {user && <Button size="small" onClick={() => deletePost(image.imageName, image.id, user.username)}>Delete Post</Button >}
+                    <div className="img-btns">
+                      <Button onClick={() => deletePost(image.imageUrl, image.key, user.username)} size="small" type="submit" className="signout-btn">Delete</Button>
+                      <Button onClick={() => setUpdatedPostText({ postText: image.description, postId: image.key })} size="small" type="submit" className="signout-btn">Edit</Button>
                     </div>
                   </div>
-                  {
-                    user && updatedPost && <form className="post-form" onSubmit={editPost}>
-                      <input onChange={fileSelected} type="file" accept="image/*"></input>
-
-                      <input onChange={e => setUpdatedPostText({ postText: e.target.value, postId: image.id })} type="text" placeholder="description"></input>
-                      <button type="submit">Update Post</button>
-                    </form>
-                  }
-                  {
-                    user && updatedPost && <form className="post-form" onSubmit={editPost}>
-                      <input onChange={fileSelected} type="file" accept="image/*"></input>
-                      <input onChange={e => setUpdatedPostText({ postText: e.target.value, postId: image.id })} type="text" placeholder="description"></input>
-                      <button type="submit">Update Post</button>
-                    </form>
-                  }
-                  {
-                    user && <form className="post-form" onSubmit={addToBucket}>
-                      <button type="submit">Add to Bucket List</button>
-                    </form>
-                  }
-                  {
-                    user && <form className="post-form" onSubmit={removeFromBucket}>
-                      <button type="submit">Remove from Bucket List</button>
-                    </form>
-                  }
                 </div>
               ))
+            }
+            {
+              updatedPost &&
+              <div className="post-container">
+                <form className="post-form" onSubmit={editPost}>
+                  <input onChange={e => setUpdatedPostText({ postText: e.target.value, postId: updatedPostText.postId })} type="text" placeholder="description"></input>
+                  <button type="submit">Edit</button>
+                </form>
+              </div>
+            }
+            {
+              bucketList &&
+              <div className="post-container">
+                <form className="post-form" onSubmit={addToBucket}>
+                  <input onChange={e => setUpdatedPostText({ postText: e.target.value, postId: updatedPostText.postId })} type="text" placeholder="description"></input>
+                  <button type="submit">Add to Bucket List</button>
+                </form>
+              </div>
             }
           </div>
         )}
@@ -157,6 +143,6 @@ function App() {
   )
 }
 
-
-
 export default App;
+
+
