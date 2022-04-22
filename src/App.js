@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import '@aws-amplify/ui-react/styles.css';
 import * as amplify from './amplify'
@@ -19,6 +18,9 @@ function App() {
   const [updatedPost, setUpdatedPost] = useState(false)
   const [updatedPostText, setUpdatedPostText] = useState({ postText: "", postId: "" })
 
+  useEffect(() => {
+    getPosts()
+  }, [])
 
   const uploadImage = async event => {
     event.preventDefault()
@@ -85,81 +87,76 @@ function App() {
     getPosts()
   }
 
-  useEffect(() => {
-    getPosts()
-  }, [])
-
-
-//this is a journaling app
-//Allow user to make a post with an image and a description
-//Allow user to edit and delete a post
-//Only authenticated users can use the app
-//If the user is not logged in ask to sign in
-//Use authenticator component
-//Use functions from amplify.js
-
 
   return(
     <>
-    <Authenticator className="loginWindow">
+      <Authenticator className="loginWindow">
         {({ signOut, user }) => (
           <div className="App">
-            <header className="App-header">
-              <img src={logo} className="App-logo" alt="logo" />
-              <p>
-                Edit, Delete, and View Posts
-              </p>
-              <p>
-                {user ? `Welcome ${user.username}` : 'Please sign in'}
-              </p>
-              <Button onClick={signOut}>Sign Out</Button>
-            </header>
-            <div className="App-body">
-              <div className="App-body-left">
-                <form onSubmit={createPost}>
-                  <input type="file" onChange={fileSelected} />
-                  <input type="text" placeholder="Description" onChange={event => setDescription(event.target.value)} />
-                  <button type="submit">Upload</button>
-                </form>
-                <form onSubmit={addToBucket}>
-                  <button type="submit">Add to Bucket List</button>
-                </form>
-                <form onSubmit={removeFromBucket}>
-                  <button type="submit">Remove from Bucket List</button>
-                </form>
-              </div>
-              <div className="App-body-right">
-                <div className="App-body-right-top">
-                  <div className="App-body-right-top-left">
-                    <img src={imgUrl} alt="image" />
-                  </div>
-                  <div className="App-body-right-top-right">
-                    <form onSubmit={editPost}>
-                      <input type="text" placeholder="Edit Description" onChange={event => setUpdatedPostText({ postText: event.target.value, postId: updatedPostText.postId })} />
-                      <button type="submit">Edit</button>
-                    </form>
-                    <form onSubmit={deletePost}>
-                      <button type="submit">Delete</button>
-                    </form>
-                  </div>
-                </div>
-                <div className="App-body-right-bottom">
-                  <form onSubmit={getImages}>
-                    <button type="submit">Get Images</button>
-                  </form>
-                  <form onSubmit={getPosts}>
-                    <button type="submit">Get Posts</button>
-                  </form>
-                </div>
-              </div>
+            <div className="top-section">
+              <form className="post-form" onSubmit={createPost}>
+                <input onChange={fileSelected} type="file" accept="image/*"></input>
+                <input onChange={e => setDescription(e.target.value)} type="text" placeholder="description"></input>
+                <button type="submit">Upload</button>
+              </form>
+              <Button onClick={signOut} size="small" type="submit" className="signout-btn">Sign Out</Button>
             </div>
+            {
+              arrayOfImages && arrayOfImages.map(image => (
+                <div className="post-container" key={image.key} >
+                  {/* <p>{image.SK}</p> */}
+                  <div className="post-img-btns-container">
+                    <div className="img-descr">
+                      <img className="post-img" src={image.imageUrl}></img>
+                      {image.description && <p className="post-description">{image.description}</p>}
+                      {image.comments && image.comments.map(cm => (
+                        <div>
+                          <Button onClick={() => addToBucket(cm.PK, cm.SK)} size="small">Add to Bucket</Button>
+                          <Button onClick={() => removeFromBucket(cm.PK, cm.SK)} size="small">Remove from bucket</Button>
+                          <p>{cm.commentText}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="post-btns">
+                      {user && <Button size="small" onClick={() => setUpdatedPost(true)}>Edit Post</Button >}
+                      {user && <Button size="small" onClick={() => deletePost(image.imageName, image.id, user.username)}>Delete Post</Button >}
+                    </div>
+                  </div>
+                  {
+                    user && updatedPost && <form className="post-form" onSubmit={editPost}>
+                      <input onChange={fileSelected} type="file" accept="image/*"></input>
+
+                      <input onChange={e => setUpdatedPostText({ postText: e.target.value, postId: image.id })} type="text" placeholder="description"></input>
+                      <button type="submit">Update Post</button>
+                    </form>
+                  }
+                  {
+                    user && updatedPost && <form className="post-form" onSubmit={editPost}>
+                      <input onChange={fileSelected} type="file" accept="image/*"></input>
+                      <input onChange={e => setUpdatedPostText({ postText: e.target.value, postId: image.id })} type="text" placeholder="description"></input>
+                      <button type="submit">Update Post</button>
+                    </form>
+                  }
+                  {
+                    user && <form className="post-form" onSubmit={addToBucket}>
+                      <button type="submit">Add to Bucket List</button>
+                    </form>
+                  }
+                  {
+                    user && <form className="post-form" onSubmit={removeFromBucket}>
+                      <button type="submit">Remove from Bucket List</button>
+                    </form>
+                  }
+                </div>
+              ))
+            }
           </div>
         )}
       </Authenticator>
-
     </>
   )
 }
+
 
 
 export default App;

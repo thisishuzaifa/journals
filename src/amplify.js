@@ -68,18 +68,17 @@ export async function getPosts() {
     return result;
   }
 
-export async function deletePost(id) {
-    const path = "/posts/delete";
-    const data = await API.post(apiName, path, {
-        body: {
-        id,
-        },
-    });
-    return data;
+export async function deletePost(pId) {
+    const postId = (pId).replace("POST#", "")
+    const path = `/posts/delete/${postId}`;
+    const result = await API.del(apiName, path)
+    console.log(result)
+    return result;
+
 }
 
 export async function getBucketListPosts() {
-    const path = "/posts/bucketlist";
+    const path = "/posts/bucketList";
     const result = await API.get(apiName, path)
     return await Promise.all(result.Items.map(async item => {
       const imageUrl = await Storage.get(item.imageName);
@@ -91,7 +90,7 @@ export async function getBucketListPosts() {
 }
 
 export async function addPostToBucketList(id) {
-    const path = "/posts/bucketlist/:id";
+    const path = "/posts/bucketList/:id";
     const result = await API.put(apiName, path, {
         body: {
         id,
@@ -102,7 +101,7 @@ export async function addPostToBucketList(id) {
 }
 
 export async function removePostFromBucketList(id) {
-    const path = "/posts/bucketlist/:id";
+    const path = "/posts/bucketList/:id";
     const result = await API.delete(apiName, path, {
         body: {
         id,
