@@ -75,6 +75,7 @@ function App() {
   const addToBucket = async event => {
     event.preventDefault()
     const result = await amplify.addPostToBucketList()
+    setBucketList(true)
     console.log(result)
     getPosts()
 
@@ -84,6 +85,14 @@ function App() {
     event.preventDefault()
     const result = await amplify.removePostFromBucketList()
     console.log(result)
+    getPosts()
+  }
+
+  const updatePost = async event => {
+    event.preventDefault()
+    const result = await amplify.updatePost(updatedPostText.postId, updatedPostText.postText)
+    console.log(result)
+    setUpdatedPost(false)
     getPosts()
   }
 
