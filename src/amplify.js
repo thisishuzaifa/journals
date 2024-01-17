@@ -28,17 +28,19 @@ export async function deleteImage(item) {
 
 
 export async function getPosts() {
-    const path = '/posts'
-    const result = await API.get(apiName, path)
-    return await Promise.all(result.Items.map(async item => {
-      const imageUrl = await Storage.get(item.imageName);
-      return {
-        ...item,
-        imageUrl
-      }
-    }))
-  }
-
+  const path = '/posts';
+  const result = await API.get(apiName, path);
+  
+  const posts = await Promise.all(result.Items.map(async item => {
+    const imageUrl = await Storage.get(item.imageName);
+    return {
+      ...item,
+      imageUrl
+    };
+  }));
+  
+  return posts;
+}
 
   export async function createPost(file, description) {
     const { key } = await Storage.put(randomString(), file);
@@ -55,57 +57,57 @@ export async function getPosts() {
 
 
   export async function updatePost(pId, description) {
-    const postId = (pId).replace("POST#", "")
-
-    const path = `/posts/update/${postId}`
-    console.log('path for del url: ' + path)
+    const postId = pId.replace("POST#", "");
+    const path = `/posts/update/${postId}`;
+    console.log('path for del url: ' + path);
     const result = await API.put(apiName, path, {
       body: {
         description,
-      }
-    })
-    console.log(result)
+      },
+    });
+    console.log(result);
     return result;
   }
 
 export async function deletePost(pId) {
-    const postId = (pId).replace("POST#", "")
+  try {
+    const postId = pId.replace("POST#", "");
     const path = `/posts/delete/${postId}`;
-    const result = await API.del(apiName, path)
-    console.log(result)
+    const result = await API.del(apiName, path);
+    console.log(result);
     return result;
-
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    throw error;
+  }
 }
 
 export async function getBucketListPosts() {
-    const path = "/posts/bucketList";
-    const result = await API.get(apiName, path)
-    return await Promise.all(result.Items.map(async item => {
-      const imageUrl = await Storage.get(item.imageName);
-      return {
-        ...item,
-        imageUrl
-      }
-    }))
+  const path = "/posts/bucketList";
+  const result = await API.get(apiName, path);
+  return await Promise.all(result.Items.map(async item => {
+    const imageUrl = await Storage.get(item.imageName);
+    return {
+      ...item,
+      imageUrl,
+      isBucketList: item.isBucketList === "true" || item.isBucketList === true
+    };
+  }));
 }
 
 export async function addPostToBucketList(id) {
-    const path = "/posts/bucketList/:id";
-    const result = await API.put(apiName, path, {
-        body: {
-        id,
-        },
-
-    });
-    return result;
+  const path = `/posts/bucketList/${id}`;
+  const result = await API.put(apiName, path, {
+    body: {
+      id,
+      isBucketList: true
+    }
+  });
+  return result;
 }
 
 export async function removePostFromBucketList(id) {
-    const path = "/posts/bucketList/:id";
-    const result = await API.delete(apiName, path, {
-        body: {
-        id,
-        },
-    });
-    return result;
+  const path = `/posts/bucketList/${id}`;
+  const result = await API.delete(apiName, path);
+  return result;
 }

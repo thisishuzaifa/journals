@@ -4,10 +4,6 @@ import * as amplify from './amplify'
 import { Button,  Authenticator } from '@aws-amplify/ui-react';
 import { useEffect, useState } from 'react'
 
-
-
-
-
 function App() {
 
   const [file, setFile] = useState()
