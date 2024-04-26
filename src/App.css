@@ -4,90 +4,180 @@
   padding: 0;
 }
 
-.App {
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+body {
+  background-color: white;
   color: white;
+  background: linear-gradient(to bottom right, #b6bea7, #8fbc8f);
 }
 
-.App-link {
-  color: #61dafb;
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.header {
+  background-color: #282c34;
+  color: white;
+  padding: 20px;
+  text-align: center;
 }
 
-img{
-  max-width: 600px;
-  max-height: 600px;
+.logo {
+  max-width: 200px;
+  height: auto;
 }
-form{
+
+.form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
-input{
-  width: 300px;
+.input-field {
+  width: 100%;
+  max-width: 400px;
   height: 50px;
-  border-radius: 5px;
+  margin-bottom: 20px;
+  padding: 10px;
   border: 1px solid #ccc;
-  margin-bottom: 10px;
-  padding-left: 10px;
+  border-radius: 5px;
 }
 
-Button{
-  width: 300px;
+.button {
+  width: 100%;
+  max-width: 400px;
   height: 50px;
-  border-radius: 5px;
+  margin-bottom: 20px;
+  padding: 10px;
   border: 1px solid #ccc;
-  margin-bottom: 10px;
-  padding-left: 10px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
 }
 
-.auth-component{
+.edit-form {
+  margin-top: 20px;
+}
+
+.edit-input {
+  width: 100%;
+  max-width: 400px;
+  height: 50px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.edit-button {
+  width: 100%;
+  max-width: 400px;
+  height: 50px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 2fr)); /* Adjust the min and max width as needed */
+  grid-gap: 20px; 
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+  text-align: center;
+}
+
+.login-header {
+  font-size: 64px;
+  font-weight: lighter;
+  color: steelblue;
+  margin-bottom: 20px;
+}
+
+.auth-component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loginWindow {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.loginWindow{
+
+.post-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.post-form input[type="file"] {
+  width: 100%;
+  max-width: 400px;
+  height: 50px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.post-form input[type="text"] {
+  width: 100%;
+  max-width: 400px;
+  height: 50px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.post-form button {
+  width: 100%;
+  max-width: 400px;
+  height: 50px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #556b2f; /* Olive green */
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.post-form button:hover {
+  background-color: #405522; /* Darker olive green on hover */
+}
+
+.signout-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+.post-container {
+  color: slategray;
+  border: 4px solid slategray;
+}
+
+.post-container img {
+  width: 75%;
+  height: auto;
 }
